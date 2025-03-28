@@ -1,4 +1,4 @@
-// Interface for Pokémon general data
+
 export interface PokemonData {
     id: number;
     name: string;

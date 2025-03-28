@@ -14,15 +14,31 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 
 export default function Home() {
-  const [searchPokemon, setSearchPokemon] = useState<string>("Bulbasaur");
+  const [input, setInput] = useState<string | number>("");
+  const [searchItem, setSearchItem] = useState<string | number>(1);
   const [pokemonData, setPokemonData] = useState<PokemonInterface | null>(null);
+
+  
+  const handleSearchClick = () => {
+    if (input) {
+      setSearchItem(input);
+      setInput("");
+    }
+  };
+
+  
+  const handleRandomClick = () => {
+    const randomNumber = Math.floor(Math.random() * 649) + 1;
+    setSearchItem(randomNumber);
+    setInput("");
+  };
 
   useEffect(() => {
     const fetchPokemon = async () => {
       try {
-        const pokemonInfo = await PokemonNameApi(searchPokemon);
+        const pokemonInfo = await PokemonNameApi(searchItem);
         const locationInfo = await LocationApi(pokemonInfo.id);
-        const speciesInfo = await getPokemonApi(searchPokemon);
+        const speciesInfo = await getPokemonApi(searchItem);
         const evolutionInfo = await getEvolutionApi(
           speciesInfo.evolution_chain.url
         );
@@ -53,8 +69,10 @@ export default function Home() {
       }
     };
 
-    fetchPokemon();
-  }, [searchPokemon]);
+    if (searchItem) {
+      fetchPokemon();
+    }
+  }, [searchItem]); 
 
   return (
     <div className="w-full">
@@ -70,16 +88,28 @@ export default function Home() {
 
       <div className="mt-20">
         <div className="flex justify-center">
-          <Input placeholder="Enter Pokemon..." className="relative bg-[#b03535] text-white rounded-[15px] text-xl lg:w-[30%] md:w-[50%] w-[70%] placeholder:text-gray-300" />
+          <Input
+            placeholder="Enter Pokemon Name or ID..."
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            type="text"
+            className="relative bg-[#b03535] border-2 border-black text-white rounded-[15px] h-12 text-xl lg:w-[30%] md:w-[50%] w-[75%] placeholder:text-gray-200"
+          />
         </div>
-        <div className="flex justify-center mt-3">
-          <Button className="relative bg-[#b03535] text-white rounded-[15px] px-4 text-lg mx-2 hover:bg-white hover:text-[#b03535]">Search</Button>
-          <Button className="relative bg-[#b03535] text-white rounded-[15px] px-4 text-lg mx-2 hover:bg-white hover:text-[#b03535]"> Random </Button>
-          <Button className="relative bg-[#b03535] text-white rounded-[15px] px-4 text-lg mx-2 hover:bg-white hover:text-[#b03535]"> Favorites </Button>
+        <div className="flex justify-center mt-3 lg:w-[30%] md:w-[50%] w-[75%]">
+          <Button className="relative bg-[#b03535] text-white rounded-[15px] px-4 text-lg mx-2 hover:bg-white hover:text-[#b03535]" onClick={handleSearchClick}>
+            Search
+          </Button>
+          <Button className="relative bg-[#b03535] text-white rounded-[15px] px-4 text-lg mx-2 hover:bg-white hover:text-[#b03535]" onClick={handleRandomClick}>
+            Random
+          </Button>
+          <Button className="relative bg-[#b03535] text-white rounded-[15px] px-4 text-lg mx-2 hover:bg-white hover:text-[#b03535]">
+            Favorites
+          </Button>
         </div>
       </div>
 
-      <div className="relative w-[90%] p-6 lg:mt-44 mt-32 mx-auto">
+      <div className="relative w-[90%] p-6 lg:mt-32 mt-24 mx-auto">
         {pokemonData && <PokeCard pokemon={pokemonData} />}
       </div>
     </div>

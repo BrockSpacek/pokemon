@@ -122,7 +122,7 @@ const PokeCard: React.FC<PokeCardProps> = ({ pokemon }) => {
               </button>
               <button 
                 onClick={toggleShiny} 
-                className="w-12 h-12 bg-white rounded-full flex items-center justify-center"
+                className={`w-12 h-12 bg-white rounded-full flex items-center justify-center ${isShiny ? 'opacity-100' : 'opacity-50'}`}
               >
                 ✨
               </button>
@@ -194,7 +194,7 @@ const PokeCard: React.FC<PokeCardProps> = ({ pokemon }) => {
             </button>
             <button 
               onClick={toggleShiny} 
-              className="w-10 h-10 bg-white rounded-full flex items-center justify-center"
+              className={`w-10 h-10 bg-white rounded-full flex items-center justify-center ${isShiny ? 'opacity-100' : 'opacity-50'}`}
             >
               ✨
             </button>

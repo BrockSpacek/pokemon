@@ -1,6 +1,6 @@
 import { PokemonData, PokemonEvolutionData, PokemonLocationData, PokemonSpeciesData } from "@/interface/interface";
 
-export const PokemonNameApi = async (names: string) => {
+export const PokemonNameApi = async (names: any) => {
   const promise = await fetch(`https://pokeapi.co/api/v2/pokemon/${names}`);
   const data: PokemonData = await promise.json();
   console.log(data);
@@ -16,7 +16,7 @@ export const LocationApi = async (idOfPokemon: number) => {
   return locationData;
 };
 
-export const getPokemonApi = async (pokemon: string) => {
+export const getPokemonApi = async (pokemon: any) => {
   const fetchData = await fetch(
     `https://pokeapi.co/api/v2/pokemon-species/${pokemon}/`
   );
@@ -24,9 +24,48 @@ export const getPokemonApi = async (pokemon: string) => {
   console.log(data)
   return data;
 };
-export const getEvolutionApi = async (evolutionChain: string) => {
+export const getEvolutionApi = async (evolutionChain: any) => {
   const fetchData = await fetch(evolutionChain);
   const data: PokemonEvolutionData = await fetchData.json();
   console.log(data)
   return data;
 };
+
+function saveToLocalStorageByName(name: string) {
+    if (typeof window === 'undefined') return; 
+
+    let namesArr = getLocalStorage();
+
+    if (!namesArr.includes(name)) {
+        namesArr.push(name);
+    }
+
+    localStorage.setItem('Names', JSON.stringify(namesArr));
+}
+
+ function getLocalStorage() {
+    if (typeof window === 'undefined') return []; 
+
+    let localStorageData = localStorage.getItem('Names');
+
+    if (localStorageData == null) {
+        return [];
+    }
+
+    return JSON.parse(localStorageData);
+}
+
+function removeFromLocalStorage(name: string) {
+    if (typeof window === 'undefined') return;
+
+    let namesArr = getLocalStorage();
+
+    let nameindex = namesArr.indexOf(name);
+
+    if (nameindex !== -1) {
+        namesArr.splice(nameindex, 1);
+        localStorage.setItem('Names', JSON.stringify(namesArr));
+    }
+}
+
+export { saveToLocalStorageByName, getLocalStorage, removeFromLocalStorage };
