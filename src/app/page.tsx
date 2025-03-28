@@ -10,6 +10,8 @@ import {
 } from "@/lib/DataServices";
 import { useEffect, useState } from "react";
 import { PokemonInterface } from "@/interface/interface";
+import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 
 export default function Home() {
   const [searchPokemon, setSearchPokemon] = useState<string>("Bulbasaur");
@@ -55,7 +57,7 @@ export default function Home() {
   }, [searchPokemon]);
 
   return (
-    <div className="min-h-screen w-full relative">
+    <div className="w-full">
       <div className="fixed inset-0">
         <Image
           src={BgImage}
@@ -66,7 +68,18 @@ export default function Home() {
         />
       </div>
 
-      <div className="relative w-full h-full min-h-screen p-6">
+      <div className="mt-20">
+        <div className="flex justify-center">
+          <Input placeholder="Enter Pokemon..." className="relative bg-[#b03535] text-white rounded-[15px] text-xl lg:w-[30%] md:w-[50%] w-[70%] placeholder:text-gray-300" />
+        </div>
+        <div className="flex justify-center mt-3">
+          <Button className="relative bg-[#b03535] text-white rounded-[15px] px-4 text-lg mx-2 hover:bg-white hover:text-[#b03535]">Search</Button>
+          <Button className="relative bg-[#b03535] text-white rounded-[15px] px-4 text-lg mx-2 hover:bg-white hover:text-[#b03535]"> Random </Button>
+          <Button className="relative bg-[#b03535] text-white rounded-[15px] px-4 text-lg mx-2 hover:bg-white hover:text-[#b03535]"> Favorites </Button>
+        </div>
+      </div>
+
+      <div className="relative w-[90%] p-6 lg:mt-44 mt-32 mx-auto">
         {pokemonData && <PokeCard pokemon={pokemonData} />}
       </div>
     </div>
