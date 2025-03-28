@@ -1,7 +1,8 @@
-"use client";
-import React, { useState } from "react";
+"use client"
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import { PokemonInterface } from "@/interface/interface";
+import { getLocalStorage, saveToLocalStorageByName, removeFromLocalStorage } from "@/lib/DataServices";
 
 interface PokeCardProps {
   pokemon: PokemonInterface;
@@ -11,13 +12,23 @@ const PokeCard: React.FC<PokeCardProps> = ({ pokemon }) => {
   const [isShiny, setIsShiny] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
 
+  useEffect(() => {
+    
+    const favorites = getLocalStorage();
+    setIsFavorite(favorites.includes(pokemon.name));
+  }, [pokemon.name]);
+
   const toggleShiny = () => {
     setIsShiny(!isShiny);
-    console.log("Shiny button is toggled");
-  }
+  };
+
   const toggleFavorite = () => {
-    setIsFavorite(!isFavorite);
-    console.log(pokemon.name);
+    if (isFavorite) {
+      removeFromLocalStorage(pokemon.name);
+    } else {
+      saveToLocalStorageByName(pokemon.name);
+    }
+    setIsFavorite(!isFavorite); 
   };
 
 
@@ -31,20 +42,20 @@ const PokeCard: React.FC<PokeCardProps> = ({ pokemon }) => {
           <div className="w-1/2 p-6">
             <div className="flex justify-between items-center mb-4">
               <div className="flex items-center">
-                <h1 className="text-4xl font-bold mr-4">{pokemon.name}</h1>
+                <h1 className="text-4xl font-bold mr-4">{pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}</h1>
                 <h2 className="text-4xl">#{pokemon.id.toString().padStart(3, '0')}</h2>
               </div>
               <div className="flex gap-4">
                 <button 
                   onClick={toggleFavorite} 
-                  className={`w-16 h-16 bg-white rounded-full flex items-center justify-center 
+                  className={`w-16 h-16 bg-white rounded-full flex items-center justify-center hover:border-black hover:opacity-100 hover:border-2 
                     ${isFavorite ? 'opacity-100' : 'opacity-50'}`}
                 >
                   ❤️
                 </button>
                 <button 
                   onClick={toggleShiny} 
-                  className={`w-16 h-16 bg-white rounded-full flex items-center justify-center
+                  className={`w-16 h-16 bg-white rounded-full flex items-center justify-center hover:border-black hover:opacity-100 hover:border-2 
                   ${isShiny ? 'opacity-100' : 'opacity-50'}`}
                 >
                   ✨
@@ -53,11 +64,11 @@ const PokeCard: React.FC<PokeCardProps> = ({ pokemon }) => {
             </div>
 
             <Image 
-              src={isShiny ? pokemon.shinyImage || pokemon.image : pokemon.image} 
+              src={isShiny ? pokemon.shinyImage : pokemon.image} 
               alt={pokemon.name} 
               width={400} 
               height={400} 
-              className="mx-auto"
+              className="mx-auto border-4 border-black bg-white rounded-full hover:bg-yellow-500 hover:border-white hover:border-8"
             />
           </div>
 
@@ -75,7 +86,7 @@ const PokeCard: React.FC<PokeCardProps> = ({ pokemon }) => {
               <div>
                 <h3 className="text-3xl font-bold mb-2 mt-14 underline">Abilities</h3>
                 <div className="max-h-30 overflow-y-auto pr-2  scrollbar-track-[#b03535] scrollbar-thumb-white">
-                  <p className="text-lg">{pokemon.abilities.join(", ")}</p>
+                  <p className="text-lg">{ pokemon.abilities.join(", ")}</p>
                 </div>
               </div>
               <div>
@@ -109,20 +120,20 @@ const PokeCard: React.FC<PokeCardProps> = ({ pokemon }) => {
         <div className="p-6">
           <div className="flex justify-between items-center mb-4">
             <div className="flex items-center">
-              <h1 className="text-3xl font-bold mr-4">{pokemon.name}</h1>
+              <h1 className="text-3xl font-bold mr-4">{pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}</h1>
               <h2 className="text-3xl">#{pokemon.id.toString().padStart(3, '0')}</h2>
             </div>
             <div className="flex gap-4">
               <button 
                 onClick={toggleFavorite} 
-                className={`w-12 h-12 bg-white rounded-full flex items-center justify-center 
+                className={`w-12 h-12 bg-white rounded-full flex items-center justify-center hover:border-black hover:opacity-100 hover:border-2 
                   ${isFavorite ? 'opacity-100' : 'opacity-50'}`}
               >
                 ❤️
               </button>
               <button 
                 onClick={toggleShiny} 
-                className={`w-12 h-12 bg-white rounded-full flex items-center justify-center ${isShiny ? 'opacity-100' : 'opacity-50'}`}
+                className={`w-12 h-12 bg-white rounded-full flex items-center justify-center hover:border-black hover:opacity-100 hover:border-2  ${isShiny ? 'opacity-100' : 'opacity-50'}`}
               >
                 ✨
               </button>
@@ -130,11 +141,11 @@ const PokeCard: React.FC<PokeCardProps> = ({ pokemon }) => {
           </div>
 
           <Image 
-            src={isShiny ? pokemon.shinyImage || pokemon.image : pokemon.image} 
+            src={isShiny ? pokemon.shinyImage : pokemon.image} 
             alt={pokemon.name} 
             width={300} 
             height={300} 
-            className="mx-auto mb-4"
+            className="mx-auto mb-4 border-4 border-black bg-white rounded-full"
           />
 
           <div className="grid grid-cols-2 gap-4 text-center -mt-10">
@@ -181,20 +192,20 @@ const PokeCard: React.FC<PokeCardProps> = ({ pokemon }) => {
       <div className="block md:hidden p-4">
         <div className="flex justify-between items-center mb-4">
           <div>
-            <h1 className="text-2xl font-bold">{pokemon.name}</h1>
+            <h1 className="text-2xl font-bold">{pokemon.name.charAt(0).toUpperCase() + pokemon.name.slice(1)}</h1>
             <h2 className="text-2xl">#{pokemon.id.toString().padStart(3, '0')}</h2>
           </div>
           <div className="flex gap-2">
             <button 
               onClick={toggleFavorite} 
-              className={`w-10 h-10 bg-white rounded-full flex items-center justify-center 
+              className={`w-10 h-10 bg-white rounded-full flex items-center justify-center hover:border-black hover:opacity-100 hover:border-2 
                 ${isFavorite ? 'opacity-100' : 'opacity-50'}`}
             >
               ❤️
             </button>
             <button 
               onClick={toggleShiny} 
-              className={`w-10 h-10 bg-white rounded-full flex items-center justify-center ${isShiny ? 'opacity-100' : 'opacity-50'}`}
+              className={`w-10 h-10 bg-white rounded-full flex items-center justify-center hover:border-black hover:opacity-100 hover:border-2  ${isShiny ? 'opacity-100' : 'opacity-50'}`}
             >
               ✨
             </button>
@@ -202,11 +213,11 @@ const PokeCard: React.FC<PokeCardProps> = ({ pokemon }) => {
         </div>
 
         <Image 
-          src={isShiny ? pokemon.shinyImage || pokemon.image : pokemon.image} 
+          src={isShiny ? pokemon.shinyImage: pokemon.image} 
           alt={pokemon.name} 
           width={250} 
           height={250} 
-          className="mx-auto mb-4"
+          className="mx-auto mb-4 border-4 border-black bg-white rounded-full"
         />
 
         <div className="grid grid-cols-2 gap-3">
