@@ -1,6 +1,6 @@
 import { PokemonData, PokemonEvolutionData, PokemonLocationData, PokemonSpeciesData } from "@/interface/interface";
 
-export const PokemonNameApi = async (names: any) => {
+export const PokemonNameApi = async (names: string | number) => {
   const promise = await fetch(`https://pokeapi.co/api/v2/pokemon/${names}`);
   const data: PokemonData = await promise.json();
   console.log(data);
@@ -16,7 +16,7 @@ export const LocationApi = async (idOfPokemon: number) => {
   return locationData;
 };
 
-export const getPokemonApi = async (pokemon: any) => {
+export const getPokemonApi = async (pokemon: string | number) => {
   const fetchData = await fetch(
     `https://pokeapi.co/api/v2/pokemon-species/${pokemon}/`
   );
@@ -24,7 +24,7 @@ export const getPokemonApi = async (pokemon: any) => {
   console.log(data)
   return data;
 };
-export const getEvolutionApi = async (evolutionChain: any) => {
+export const getEvolutionApi = async (evolutionChain: string) => {
   const fetchData = await fetch(evolutionChain);
   const data: PokemonEvolutionData = await fetchData.json();
   console.log(data)
@@ -34,7 +34,7 @@ export const getEvolutionApi = async (evolutionChain: any) => {
 function saveToLocalStorageByName(name: string) {
     if (typeof window === 'undefined') return; 
 
-    let namesArr = getLocalStorage();
+    const namesArr = getLocalStorage();
 
     if (!namesArr.includes(name)) {
         namesArr.push(name);
@@ -46,7 +46,7 @@ function saveToLocalStorageByName(name: string) {
  function getLocalStorage() {
     if (typeof window === 'undefined') return []; 
 
-    let localStorageData = localStorage.getItem('Names');
+    const localStorageData = localStorage.getItem('Names');
 
     if (localStorageData == null) {
         return [];
@@ -58,9 +58,9 @@ function saveToLocalStorageByName(name: string) {
 function removeFromLocalStorage(name: string) {
     if (typeof window === 'undefined') return;
 
-    let namesArr = getLocalStorage();
+    const namesArr = getLocalStorage();
 
-    let nameindex = namesArr.indexOf(name);
+    const nameindex = namesArr.indexOf(name);
 
     if (nameindex !== -1) {
         namesArr.splice(nameindex, 1);
