@@ -38,7 +38,7 @@ const PokeCard: React.FC<PokeCardProps> = ({ pokemon }) => {
       {/* Desktop Layout */}
       <div className="hidden lg:block">
         <div className="flex">
-          {/* Left Side */}
+          {/* Left Half of Card*/}
           <div className="w-1/2 p-6">
             <div className="flex justify-between items-center mb-4">
               <div className="flex items-center">
@@ -72,7 +72,7 @@ const PokeCard: React.FC<PokeCardProps> = ({ pokemon }) => {
             />
           </div>
 
-          {/* Right Side */}
+          {/* Right Half of Card */}
           <div className="w-1/2 p-6 bg-[#b03535b4]">
             <div className="grid grid-cols-2 gap-4">
               <div>
